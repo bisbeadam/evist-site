@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eVist</title>
+<style>
+  :root { color-scheme: light dark; --accent: rgb(245,152,71); }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center;
+         font: 17px/1.5 -apple-system, system-ui, sans-serif; padding: 24px; box-sizing: border-box; }
+  main { max-width: 480px; text-align: center; }
+  h1 { font-size: 28px; margin: 0 0 8px; }
+  p  { margin: 0 0 20px; opacity: .8; }
+  a.btn { display: inline-block; padding: 14px 28px; border-radius: 14px;
+          background: var(--accent); color: #1e1e1e; font-weight: 600; text-decoration: none; }
+  .small { font-size: 14px; opacity: .6; margin-top: 28px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>eVist</h1>
+  <p id="msg">Aquest enllaç és un àlbum de fotos en format .pholio.</p>
+  <a id="open" class="btn" href="#">Obrir amb eVist</a>
+  <p class="small">
+    Si no tens eVist, aviat podràs veure l'àlbum aquí mateix.
+  </p>
+</main>
+<script>
+  // Pàgina provisional. Si l'app està instal·lada, iOS i Android ni tan
+  // sols arriben aquí: obren eVist directament gràcies als fitxers de
+  // .well-known. Qui arriba aquí no té l'app (o el sistema no ho ha
+  // reconegut); li oferim el pholio:// com a segona oportunitat.
+  const url = new URLSearchParams(location.search).get('url');
+  const btn = document.getElementById('open');
+  if (url) {
+    btn.href = 'pholio://open?url=' + encodeURIComponent(url);
+  } else {
+    btn.style.display = 'none';
+    document.getElementById('msg').textContent = 'eVist — àlbums de fotos .pholio.';
+  }
+</script>
+</body>
+</html>

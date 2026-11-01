@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": [ "4WLVV6GF6W.cat.bblp.evist" ],
+        "appIDs": [ "4WLVV6GF6W.cat.bblp.evist", "4WLVV6GF6W.cat.bblp.evistmc" ],
         "components": [
           { "/": "/open",   "comment": "Obrir un àlbum .pholio: /open?url=..." },
           { "/": "/open/*" }

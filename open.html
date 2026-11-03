@@ -198,12 +198,16 @@ const $ = id => document.getElementById(id);
 const enc = new TextEncoder();
 
 /* ---------- URL de l'àlbum ---------- */
-/// Mateixa conversió que fan les apps: un enllaç compartit de Dropbox
-/// (dl=0) serveix una pàgina web; amb dl=1 serveix els bytes i admet Range.
+/// Un enllaç compartit de Dropbox (www.dropbox.com, dl=0) serveix una
+/// pàgina web. Amb dl=1 serveix els bytes, però a través d'una redirecció
+/// cap a un host de descàrrega que el navegador no pot seguir en mode CORS.
+/// El host dl.dropboxusercontent.com serveix el mateix fitxer DIRECTAMENT,
+/// sense redirecció, amb Range i amb les capçaleres CORS: és el que fem servir.
 function normalizeRemoteURL(raw) {
   let u; try { u = new URL(raw); } catch { return raw; }
   const h = u.hostname.toLowerCase();
-  if (h !== 'www.dropbox.com' && h !== 'dropbox.com') return raw;
+  if (h !== 'www.dropbox.com' && h !== 'dropbox.com' && h !== 'dl.dropboxusercontent.com') return raw;
+  u.hostname = 'dl.dropboxusercontent.com';
   u.searchParams.delete('dl'); u.searchParams.delete('raw');
   u.searchParams.set('dl', '1');
   return u.toString();
@@ -508,7 +512,9 @@ document.addEventListener('keydown', e => {
 
 /* ---------- Arrencada ---------- */
 (async function main() {
-  const raw = new URLSearchParams(location.search).get('url');
+  // Tolerem un interrogant de més (open??url=...), que és fàcil de teclejar a mà.
+  const params = new URLSearchParams(location.search);
+  const raw = params.get('url') ?? params.get('?url');
   if (!raw) { showState(`<h2>${t('noUrl')}</h2><p>${t('noUrlText')}</p>${appLinks('')}`); return; }
   const url = normalizeRemoteURL(raw.trim());
   $('open-app').href = 'pholio://open?url=' + encodeURIComponent(raw.trim());

@@ -87,8 +87,13 @@
           background: rgba(255,255,255,.08); }
   .icon:hover { background: rgba(255,255,255,.16); }
   #lb-main { flex: 1; position: relative; display: flex; min-height: 0; }
-  #stage { flex: 1; display: grid; place-items: center; min-width: 0; position: relative; touch-action: pan-y; }
-  #stage img, #stage video { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+  /* min-height: 0 perquè l'escenari pugui encongir-se dins del flex; i la
+     imatge en posició absoluta, que és l'única manera que "100%" vulgui dir
+     de debò l'alçada de l'escenari. Amb max-height: 100% a seques, una foto
+     vertical creixia fins a la seva mida natural i quedava tallada. */
+  #stage { flex: 1; display: grid; place-items: center; min-width: 0; min-height: 0; position: relative; touch-action: pan-y; overflow: hidden; }
+  #stage img, #stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+                             user-select: none; -webkit-user-drag: none; }
   #stage .spinner { position: absolute; }
   .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 72px; display: grid;
          place-items: center; font-size: 28px; opacity: .55; }
